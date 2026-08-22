@@ -1,0 +1,24 @@
+# Dependencies and build output
+**/node_modules/
+**/.expo/
+**/dist/
+**/coverage/
+.DS_Store
+
+# Local settings and secrets
+**/.env
+**/.env.*
+!.env.example
+
+# Generated Apple and Android artifacts
+mobile/ios/
+mobile/android/
+*.xcuserstate
+
+# Local agent resources supplied for development only
+.manus/plugins/
+.manus/skills/
+
+# Worker generated types and local runtime state
+worker/worker-configuration.d.ts
+worker/.wrangler/
