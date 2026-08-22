@@ -1,4 +1,4 @@
-import { getDevelopmentGuestExperience, isDevelopmentFixtureEnabled, issueDevelopmentQr, validateDevelopmentQr, type DevelopmentScenario } from "./developmentFixture";
+import { createDevelopmentInvitation, getDevelopmentChecklist, getDevelopmentGuestExperience, isDevelopmentFixtureEnabled, issueDevelopmentQr, parseDevelopmentGuestKey, validateDevelopmentQr, type DevelopmentScenario } from "./developmentFixture";
 import { developmentScannerPage } from "./developmentScannerPage";
 
 type JsonRecord = Record<string, unknown>;
@@ -61,7 +61,7 @@ export default {
     const url = new URL(request.url);
     const startedAt = Date.now();
     if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: { "access-control-allow-origin": "*", "access-control-allow-methods": "GET, POST, OPTIONS", "access-control-allow-headers": "content-type" } });
-    const methodFailure = url.pathname === "/v1/guest/status" || url.pathname === "/v1/guest/experience" || url.pathname === "/v1/guest/qr" || url.pathname === "/development/scanner" ? allowMethods(request, ["GET"]) : url.pathname === "/v1/qr/validate" || url.pathname === "/v1/development/qr" ? allowMethods(request, ["POST"]) : null;
+    const methodFailure = url.pathname === "/v1/guest/status" || url.pathname === "/v1/guest/experience" || url.pathname === "/v1/guest/qr" || url.pathname === "/development/scanner" ? allowMethods(request, ["GET"]) : url.pathname === "/v1/qr/validate" || url.pathname === "/v1/development/qr" || url.pathname === "/v1/development/checklist" || url.pathname === "/v1/development/invitations" ? allowMethods(request, ["POST"]) : null;
     if (methodFailure) return methodFailure;
 
     let response: Response;
@@ -70,10 +70,13 @@ export default {
     } else if (url.pathname === "/v1/guest/status") {
       response = isDevelopmentFixtureEnabled(env) ? json({ state: "ready", title: "Development fixture is connected.", detail: "Synthetic data is enabled for local product development only.", environment: "development_fixture" }) : json({ state: "source_not_connected", title: "Your BGC guest data is not connected yet.", detail: "Once BGC links the booking source, your cruise, pass, reminders, and QR access will appear here automatically." });
     } else if (url.pathname === "/v1/guest/experience") {
-      const experience = getDevelopmentGuestExperience(env);
+      const experience = getDevelopmentGuestExperience(env, parseDevelopmentGuestKey(url.searchParams.get("guest")));
       response = experience ? json(experience) : notReady("guest_experience");
     } else if (url.pathname === "/v1/guest/qr") {
-      const credential = await issueDevelopmentQr(env);
+      const guestKey = parseDevelopmentGuestKey(url.searchParams.get("guest"));
+      const experience = getDevelopmentGuestExperience(env, guestKey);
+      const scenario: DevelopmentScenario = url.searchParams.get("scenario") === "expired" ? "expired" : experience?.pass.status === "unpaid" ? "unpaid" : "paid";
+      const credential = await issueDevelopmentQr(env, scenario, Date.now(), guestKey);
       response = credential ? json({ environment: "development_fixture", ...credential, notice: "Synthetic development credential only. It is never valid against BGC production operations." }) : notReady("dynamic_qr_credential");
     } else if (url.pathname === "/v1/qr/validate") {
       const body = await readJsonBody(request);
@@ -83,9 +86,19 @@ export default {
     } else if (url.pathname === "/v1/development/qr") {
       const body = await readJsonBody(request);
       const scenario = body?.scenario;
-      const allowedScenario: DevelopmentScenario = scenario === "unpaid" || scenario === "expired" ? scenario : "paid";
-      const credential = await issueDevelopmentQr(env, allowedScenario);
+      const allowedScenario: DevelopmentScenario = scenario === "unpaid" || scenario === "expired" || scenario === "unbooked" ? scenario : "paid";
+      const credential = await issueDevelopmentQr(env, allowedScenario, Date.now(), parseDevelopmentGuestKey(body?.guest));
       response = credential ? json({ environment: "development_fixture", scenario: allowedScenario, ...credential }) : notReady("development_qr_issuer");
+    } else if (url.pathname === "/v1/development/checklist") {
+      const body = await readJsonBody(request);
+      const taskId = typeof body?.taskId === "string" ? body.taskId.slice(0, 120) : "";
+      const completed = body?.completed === true;
+      const checklist = taskId ? getDevelopmentChecklist(env, parseDevelopmentGuestKey(body?.guest), taskId, completed) : null;
+      response = checklist ? json({ environment: "development_fixture", checklist, notice: "Synthetic checklist response only. This preview does not persist changes." }) : json({ error: "invalid_checklist_request", message: "Send a development guest, task ID, and completion state." }, 400);
+    } else if (url.pathname === "/v1/development/invitations") {
+      const body = await readJsonBody(request);
+      const invitation = createDevelopmentInvitation(env, parseDevelopmentGuestKey(body?.guest));
+      response = invitation ? json(invitation) : notReady("development_invitation");
     } else if (url.pathname === "/development/scanner") {
       response = isDevelopmentFixtureEnabled(env) ? html(developmentScannerPage(url.origin)) : notReady("development_scanner");
     } else {

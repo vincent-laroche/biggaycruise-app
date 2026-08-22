@@ -20,3 +20,12 @@
 - [x] Correct reminder-card sizing and row behavior inside the phone frame.
 - [x] Correct event date, title, timing, venue, and arrow alignment so metadata cannot overlap or truncate unpredictably.
 - [x] Verify the corrected lower-page composition at desktop-preview and phone widths before redeploying.
+- [x] Replace the oversized centered profile initial with a compact guest identity treatment that feels intentional in the mobile travel context.
+- [x] Validate the refined profile layout on the shared web preview and redeploy it.
+- [x] Create a requirements-to-test-path checklist covering every confirmed Peter request and mark each item only when executable in the development mockup.
+- [x] Add multiple clearly synthetic guest, cruise, booking, and pass states to demonstrate booked, paid, unpaid, upcoming, and past-trip scenarios.
+- [x] Make guest tasks testable with in-app completion state, incomplete-item reminders, and add-on prompts for drink packages, BGC passes, beach clubs, and pre-cruise hotels.
+- [x] Add testable onboard event reminders, next-cruise promotion, history, website/social destinations, and friend-invitation flows.
+- [x] Add a testable FAQ/help surface and make support pathways visible from the guest experience.
+- [x] Add staff-facing tests for approved, unpaid, expired, invalid, and unbooked QR outcomes.
+- [x] Run and document end-to-end synthetic test paths for every Peter requirement before publishing the expanded mockup.
