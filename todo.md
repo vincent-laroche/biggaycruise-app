@@ -10,3 +10,5 @@
 - [x] Prepare a fixture-backed web preview with no production BGC data or secrets.
 - [x] Expose the web mockup through a temporary clickable development URL.
 - [x] Verify the external preview loads the synthetic guest experience and label it as development-only.
+- [x] Diagnose the expired temporary tunnel and replace it with a newly verified preview path.
+- [x] Confirm the replacement link serves the Expo mockup and same-origin synthetic guest API externally.
