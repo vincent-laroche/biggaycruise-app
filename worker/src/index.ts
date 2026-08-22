@@ -6,6 +6,7 @@ type JsonRecord = Record<string, unknown>;
 interface Env {
   BGC_DEVELOPMENT_FIXTURES?: string;
   DEV_QR_SIGNING_KEY?: string;
+  ASSETS: Fetcher;
 }
 
 function json(body: JsonRecord, status = 200, requestId = crypto.randomUUID()): Response {
@@ -88,7 +89,7 @@ export default {
     } else if (url.pathname === "/development/scanner") {
       response = isDevelopmentFixtureEnabled(env) ? html(developmentScannerPage(url.origin)) : notReady("development_scanner");
     } else {
-      response = json({ error: "not_found" }, 404);
+      response = await env.ASSETS.fetch(request);
     }
 
     ctx.waitUntil(Promise.resolve(console.log(JSON.stringify({ event: "api_request", path: url.pathname, method: request.method, status: response.status, durationMs: Date.now() - startedAt }))));

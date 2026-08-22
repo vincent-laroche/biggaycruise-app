@@ -7,3 +7,6 @@
 - [x] Add a minimal staff scanner interface for approved, unpaid, expired, and invalid QR outcomes.
 - [x] Test fixture isolation, API contracts, mobile guest states, QR outcomes, and native/web builds.
 - [x] Document the exact replacement boundary for switching from fixture mode to BGC’s authoritative booking/pass source.
+- [x] Prepare a fixture-backed web preview with no production BGC data or secrets.
+- [x] Expose the web mockup through a temporary clickable development URL.
+- [x] Verify the external preview loads the synthetic guest experience and label it as development-only.

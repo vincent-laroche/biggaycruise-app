@@ -14,7 +14,8 @@ export type GuestExperience = {
 
 export type GuestQrCredential = { environment: "development_fixture"; token: string; expiresAt: string; notice: string };
 
-const apiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL;
+const explicitApiBaseUrl = process.env.EXPO_PUBLIC_API_BASE_URL;
+const apiBaseUrl = explicitApiBaseUrl || (typeof window !== "undefined" ? window.location.origin : undefined);
 
 export function isApiConfigured(): boolean {
   return Boolean(apiBaseUrl);

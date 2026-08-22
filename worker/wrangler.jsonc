@@ -10,5 +10,9 @@
   },
   "vars": {
     "BGC_DEVELOPMENT_FIXTURES": "true"
+  },
+  "assets": {
+    "directory": "../mobile/dist",
+    "not_found_handling": "single-page-application"
   }
 }
