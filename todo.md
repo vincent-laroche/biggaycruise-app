@@ -16,3 +16,7 @@
 - [x] Redesign the guest home, pass/QR, reminders, events, and checklist surfaces while retaining the existing fixture-backed app behavior.
 - [x] Refine mobile navigation, floating controls, empty/loading states, and accessibility for the new visual system.
 - [x] Validate the redesigned app through Expo web and native TypeScript builds, then redeploy the Cloudflare preview.
+- [x] Constrain the desktop web preview to a centered iPhone-sized guest-app canvas while preserving full native device width.
+- [x] Correct reminder-card sizing and row behavior inside the phone frame.
+- [x] Correct event date, title, timing, venue, and arrow alignment so metadata cannot overlap or truncate unpredictably.
+- [x] Verify the corrected lower-page composition at desktop-preview and phone widths before redeploying.
