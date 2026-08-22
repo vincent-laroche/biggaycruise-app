@@ -7,11 +7,13 @@
     "dev": "wrangler dev",
     "deploy": "wrangler deploy",
     "check": "tsc --noEmit",
-    "types": "wrangler types"
+    "types": "wrangler types",
+    "test": "vitest run"
   },
   "devDependencies": {
     "@types/node": "^24.0.0",
     "typescript": "^5.9.3",
+    "vitest": "^4.1.11",
     "wrangler": "^4.47.0"
   }
 }

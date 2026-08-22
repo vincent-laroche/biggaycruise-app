@@ -15,3 +15,7 @@ The repository is being initialized from the approved product plan. The first im
 ## Security baseline
 
 Never store payment-card information in this repository. QR credentials must be short-lived and verified by the server. Keep external credentials in environment-specific secret stores only.
+
+## Development fixture mode
+
+The repository contains an environment-gated synthetic fixture to unblock product development before BGC connects its booking/pass source. It uses invented data only and is never a production fallback. Start the Worker with `worker/.dev.vars` based on `worker/.dev.vars.example`, then set `EXPO_PUBLIC_API_BASE_URL` from `mobile/.env.example` to a reachable Worker URL. The development-only scanner sandbox is available at `/development/scanner` while fixture mode is enabled.

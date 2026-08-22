@@ -1,0 +1,2 @@
+# Development-only generated signing key. Never reuse this value in production.
+DEV_QR_SIGNING_KEY=replace_with_a_random_local_secret

@@ -22,3 +22,4 @@ mobile/android/
 # Worker generated types and local runtime state
 worker/worker-configuration.d.ts
 worker/.wrangler/
+worker/.dev.vars
