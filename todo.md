@@ -12,3 +12,7 @@
 - [x] Verify the external preview loads the synthetic guest experience and label it as development-only.
 - [x] Diagnose the expired temporary tunnel and replace it with a newly verified preview path.
 - [x] Confirm the replacement link serves the Expo mockup and same-origin synthetic guest API externally.
+- [x] Establish a premium editorial Big Gay Cruise design system based on the supplied reference’s spacing, rounded surfaces, typography hierarchy, and sky-blue feature accent.
+- [x] Redesign the guest home, pass/QR, reminders, events, and checklist surfaces while retaining the existing fixture-backed app behavior.
+- [x] Refine mobile navigation, floating controls, empty/loading states, and accessibility for the new visual system.
+- [x] Validate the redesigned app through Expo web and native TypeScript builds, then redeploy the Cloudflare preview.
